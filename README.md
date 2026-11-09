@@ -72,7 +72,7 @@ One row per airport per day, sorted by `date` and then `item_id`. A value a sour
 | `region` | Continent / area (North America, Europe, Asia, Middle East, Oceania, South America, Africa) | text |
 | `temp_c` | Air temperature at the time of the run | °C |
 | `wind_kt` | Wind speed | knots |
-| `visibility_km` | Horizontal visibility. METAR "10+" miles is stored as 16.09; both sources cap at their maximum reportable value | kilometres |
+| `visibility_km` | Horizontal visibility. METAR reports "10+" statute miles for good visibility, stored as 16.09; Open-Meteo values are not capped at that | kilometres |
 | `pressure_hpa` | Sea-level pressure (METAR: `slp`, falling back to the altimeter setting when missing; Open-Meteo: `pressure_msl`) | hectopascals |
 
 ## `data/status.json`
