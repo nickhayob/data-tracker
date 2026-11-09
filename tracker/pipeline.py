@@ -22,7 +22,7 @@ ROOT = build.ROOT
 
 def run(now: datetime | None = None, fetch=None, root: Path = ROOT, publish: bool = True, sources=SOURCES) -> dict:
     """Do one run and return the status dict. ``fetch(source) -> bytes`` can replace the network (tests)."""
-    now = now or datetime.now(timezone.utc)
+    now = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
     date = now.strftime("%Y-%m-%d")  # every run uses the UTC date of the moment it runs
     fetch = fetch or (lambda source: source.fetch())
     data_dir = root / "data"
