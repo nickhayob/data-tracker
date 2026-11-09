@@ -141,5 +141,79 @@
 
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
-  window.AT = { NUM, TOP_N, esc, parseCSV, loadData, moveScore, compare, fmt, fmtSigned, unitOf, labelOf, init, showError, cssVar };
+  // --- color and graphics helpers ----------------------------------------------------------
+  // Icon and color (a CSS variable) for each numeric column.
+  const METRIC = {
+    temp_c: { icon: "🌡️", color: "--s2" },
+    wind_kt: { icon: "💨", color: "--s3" },
+    visibility_km: { icon: "👁️", color: "--s7" },
+    pressure_hpa: { icon: "⏲️", color: "--s1" },
+  };
+  const REGION_COLOR = { "North America": "--s1", "Europe": "--s7", "Asia": "--s2", "Middle East": "--s4", "Oceania": "--s3", "South America": "--s5", "Africa": "--s6" };
+  const regionColor = (region) => `var(${REGION_COLOR[region] || "--s8"})`;
+
+  // Temperature color scale: cold blue -> teal -> yellow -> orange -> hot red.
+  const STOPS = [[-10, [43, 95, 196]], [0, [90, 169, 230]], [10, [143, 208, 192]], [20, [242, 211, 107]], [30, [240, 138, 60]], [38, [216, 67, 47]]];
+  function tempColor(t) {
+    if (t === null || t === undefined) return null;
+    const x = Math.max(STOPS[0][0], Math.min(STOPS[STOPS.length - 1][0], t));
+    let i = 0;
+    while (i < STOPS.length - 2 && x > STOPS[i + 1][0]) i++;
+    const [t0, c0] = STOPS[i], [t1, c1] = STOPS[i + 1];
+    const k = (x - t0) / (t1 - t0);
+    const rgb = c0.map((v, j) => Math.round(v + (c1[j] - v) * k));
+    const light = 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2] > 150;
+    return { bg: `rgb(${rgb.join(",")})`, fg: light ? "#0b0b0b" : "#ffffff" };
+  }
+  function tempChip(t, digits = 1) {
+    const c = tempColor(t);
+    return c ? `<span class="chip" style="background:${c.bg};color:${c.fg}">${fmt(t, digits)}</span>` : "–";
+  }
+
+  /** A weather-style icon worked out from the numbers only (there is no cloud data). */
+  function condition(r) {
+    if (r.visibility_km !== null && r.visibility_km < 5) return { icon: "🌫️", label: "Low visibility (under 5 km)" };
+    if (r.wind_kt !== null && r.wind_kt >= 20) return { icon: "💨", label: "Windy (20 kt or more)" };
+    if (r.temp_c !== null && r.temp_c <= 0) return { icon: "❄️", label: "Freezing (0 °C or below)" };
+    if (r.temp_c !== null && r.temp_c >= 30) return { icon: "🔥", label: "Hot (30 °C or above)" };
+    return { icon: "🌤️", label: "Mild, light wind, good visibility" };
+  }
+  const condIcon = (r) => { const c = condition(r); return `<span class="cond" title="${esc(c.label)}">${c.icon}</span>`; };
+
+  /** Tiny inline line chart. `values` may contain nulls; fewer than 2 points draws nothing. */
+  function sparkline(values, color, w = 84, h = 24) {
+    const pts = values.map((v, i) => [i, v]).filter(([, v]) => v !== null && v !== undefined);
+    if (pts.length < 2) return `<span class="muted small">–</span>`;
+    const min = Math.min(...pts.map((p) => p[1])), max = Math.max(...pts.map((p) => p[1]));
+    const x = (i) => 2 + (i / (values.length - 1)) * (w - 4);
+    const y = (v) => (max === min ? h / 2 : h - 3 - ((v - min) / (max - min)) * (h - 6));
+    const path = pts.map(([i, v]) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(" ");
+    const [li, lv] = pts[pts.length - 1];
+    return `<svg class="spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" role="img" aria-label="trend over ${values.length} days"><polyline points="${path}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/><circle cx="${x(li).toFixed(1)}" cy="${y(lv).toFixed(1)}" r="2.6" fill="${color}"/></svg>`;
+  }
+
+  /** Page banner: sky gradient with a plane illustration. */
+  function hero(title, subHtml) {
+    const el = document.getElementById("hero");
+    if (!el) return;
+    el.className = "hero";
+    el.innerHTML = `<div class="inner"><div><h1>${esc(title)}</h1><p id="lastrun">${subHtml}</p></div>
+      <svg class="hero-art" viewBox="0 0 420 170" aria-hidden="true">
+        <circle cx="332" cy="50" r="46" fill="#ffd166" opacity=".25"/><circle cx="332" cy="50" r="30" fill="#ffd166"/>
+        <g fill="#fff" opacity=".95"><ellipse cx="108" cy="126" rx="48" ry="16"/><circle cx="90" cy="113" r="21"/><circle cx="128" cy="108" r="25"/></g>
+        <g fill="#fff" opacity=".7"><ellipse cx="300" cy="146" rx="40" ry="12"/><circle cx="286" cy="136" r="15"/><circle cx="314" cy="133" r="18"/></g>
+        <path d="M20 152 Q200 22 380 72" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" opacity=".9"/>
+        <g transform="translate(236 59) rotate(-7)"><polygon points="26,0 -16,-14 -8,0 -16,14" fill="#fff"/><polygon points="6,0 -8,-26 -2,0 -8,26" fill="#dcecff"/></g>
+      </svg></div>`;
+  }
+
+  /** Chart.js defaults taken from the page colors (call before creating charts). */
+  function chartDefaults() {
+    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+    Chart.defaults.font.size = 12;
+    Chart.defaults.color = cssVar("--text-2");
+    Chart.defaults.borderColor = cssVar("--grid");
+  }
+
+  window.AT = { METRIC, regionColor, tempColor, tempChip, condition, condIcon, sparkline, hero, chartDefaults, NUM, TOP_N, esc, parseCSV, loadData, moveScore, compare, fmt, fmtSigned, unitOf, labelOf, init, showError, cssVar };
 })();

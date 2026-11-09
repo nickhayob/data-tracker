@@ -4,11 +4,10 @@
   const content = document.getElementById("content");
   const e = AT.esc;
   let data;
-  try { data = await AT.loadData(); } catch (error) { document.getElementById("meta").textContent = ""; return AT.showError(content, error); }
+  try { data = await AT.loadData(); } catch (error) { AT.hero("Trends", ""); return AT.showError(content, error); }
   const { rows, dates, latestDate } = data;
-  if (!rows.length) { document.getElementById("meta").textContent = "The history file has no rows yet."; return; }
-  document.getElementById("meta").textContent =
-    `Computed from ${rows.length} rows in data/history.csv: ${dates.length} day${dates.length === 1 ? "" : "s"} (${dates[0]} to ${latestDate}).`;
+  if (!rows.length) { AT.hero("Trends", "The history file has no rows yet."); return; }
+  AT.hero("Trends", `Computed from ${rows.length} rows in data/history.csv: ${dates.length} day${dates.length === 1 ? "" : "s"} (${dates[0]} to ${latestDate}).`);
 
   // ---------- helpers ----------
   const byDate = new Map(dates.map((d) => [d, rows.filter((r) => r.date === d)]));
@@ -30,6 +29,7 @@
 
   // ---------- findings (each: heading that states the finding, explanation with numbers, chart) ----------
   const findings = [];
+  const ACCENTS = ["--s2", "--s1", "--s7", "--s3", "--s4"];  // one accent color per finding
 
   // 1. how far apart the airports are on the latest day
   (function () {
@@ -41,7 +41,8 @@
       heading: `${label(warm)} is ${f1(warm.temp_c - cold.temp_c)} °C warmer than ${label(cold)}`,
       para: `On ${latestDate}, the history file has a temperature for ${day.length} airports. The warmest is ${label(warm)} at ${f1(warm.temp_c)} °C and the coldest is ${label(cold)} at ${f1(cold.temp_c)} °C. ` +
         `The gap is the maximum minus the minimum of the temp_c column on that date: ${f1(warm.temp_c)} − ${f1(cold.temp_c)} = ${f1(warm.temp_c - cold.temp_c)} °C. The chart shows the ${n} warmest and the ${n} coldest airports; the average of all ${day.length} is ${f1(mean(day.map((r) => r.temp_c)))} °C.`,
-      chart: { kind: "bar", horizontal: true, labels: shown.map(label), values: shown.map((r) => r.temp_c), unit: "°C", name: "Temperature" },
+      stat: [`${f1(warm.temp_c - cold.temp_c)} °C`, "warmest vs coldest"],
+      chart: { kind: "bar", horizontal: true, labels: shown.map(label), values: shown.map((r) => r.temp_c), unit: "°C", name: "Temperature", heat: true },
     });
   })();
 
@@ -61,6 +62,7 @@
       para: `For each of the ${changes.length} airports with a temperature on both ${dates[0]} (first run) and ${latestDate} (latest), the change is the latest temp_c minus the first-day temp_c. ` +
         `${label(up.r)} moved ${AT.fmtSigned(up.d)} °C (${f1(first.get(up.r.item_id).temp_c)} → ${f1(up.r.temp_c)}); ${label(down.r)} moved ${AT.fmtSigned(down.d)} °C (${f1(first.get(down.r.item_id).temp_c)} → ${f1(down.r.temp_c)}). ` +
         `The average change across all ${changes.length} airports is ${AT.fmtSigned(mean(changes.map((c) => c.d)))} °C. Orange bars warmed, blue bars cooled.`,
+      stat: [`${AT.fmtSigned(up.d)} °C`, "biggest change"],
       chart: { kind: "bar", horizontal: true, labels: shown.map((c) => label(c.r)), values: shown.map((c) => c.d), unit: "°C", name: "Change in temperature", diverging: true },
     });
   })();
@@ -82,6 +84,7 @@
       heading: `${best.date} was the day of the biggest move: an average score of ${f2(best.avg)}`,
       para: `For each date after the first, every airport present on that date and the day before gets a move score: the largest of |change| ÷ scale across temperature (5 °C), wind (10 kt), visibility (5 km) and pressure (5 hPa). The chart plots the average score over all airports for each date. ` +
         `${best.date} (compared with ${best.prev}) was highest at ${f2(best.avg)} across ${best.n} airports; the single biggest mover was ${label(best.top.r)} with a score of ${f2(best.top.score)} (${best.top.key ? AT.labelOf(best.top.key).toLowerCase() : "no change"}).`,
+      stat: [f2(best.avg), "average move score"],
       chart: { kind: "bar", horizontal: false, labels: perDay.map((p) => p.date), values: perDay.map((p) => p.avg), unit: "", name: "Average move score" },
     });
   })();
@@ -98,6 +101,7 @@
       heading: `${label(top.it)} is the windiest airport, averaging ${f1(top.avg)} kt`,
       para: `The average is the mean of the wind_kt column over every day the airport has a reading: ${label(top.it)} has ${plural(top.n, "day")} averaging ${f1(top.avg)} kt. ` +
         `The calmest is ${label(calm.it)} at ${f1(calm.avg)} kt over ${plural(calm.n, "day")}, so the windiest airport averages ${f1(top.avg / (calm.avg || NaN))} times the wind of the calmest. The chart shows the ten windiest of ${perItem.length} airports.`,
+      stat: [`${f1(top.avg)} kt`, "average wind"],
       chart: { kind: "bar", horizontal: true, labels: shown.map((x) => label(x.it)), values: shown.map((x) => x.avg), unit: "kt", name: "Average wind speed" },
     });
   })();
@@ -114,6 +118,7 @@
       heading: `Air pressure differs by ${f1(last.spread)} hPa between airports on ${last.date}`,
       para: `The spread is the highest minus the lowest pressure_hpa among the ${last.n} airports reporting on a date. On ${last.date} the highest is ${label(last.hi)} at ${f1(last.hi.pressure_hpa)} hPa and the lowest is ${label(last.lo)} at ${f1(last.lo.pressure_hpa)} hPa, a spread of ${f1(last.spread)} hPa. ` +
         `${perDay.length > 1 ? `Across the ${perDay.length} days the spread was widest on ${widest.date} (${f1(widest.spread)} hPa) and narrowest at ${f1(Math.min(...perDay.map((p) => p.spread)))} hPa.` : "Only one day is available so far, so the line is a single point."}`,
+      stat: [`${f1(last.spread)} hPa`, "pressure spread"],
       chart: { kind: "line", labels: perDay.map((p) => p.date), values: perDay.map((p) => p.spread), unit: "hPa", name: "Pressure spread" },
     });
   })();
@@ -133,20 +138,17 @@
         </div>
         <div class="items" id="p-items">${items.map((i) => `<label>${swatches(i.item_id)}<input type="checkbox" value="${e(i.item_id)}"> ${e(i.city)} (${e(i.iata)})</label>`).join("")}</div>
       </fieldset>
-      <div class="grid2" id="line-grid">${AT.NUM.map((n) => `<div class="card"><h3>${e(n.label)} (${e(n.unit)})</h3><div class="chart-box"><canvas id="line-${n.key}" role="img" aria-label="${e(n.label)} over the days for the selected airports"></canvas></div></div>`).join("")}</div>
+      <div class="grid2" id="line-grid">${AT.NUM.map((n) => `<div class="card" style="--c:var(${AT.METRIC[n.key].color})"><h3>${AT.METRIC[n.key].icon} ${e(n.label)} (${e(n.unit)})</h3><div class="chart-box"><canvas id="line-${n.key}" role="img" aria-label="${e(n.label)} over the days for the selected airports"></canvas></div></div>`).join("")}</div>
     </section>
     <section class="block"><h2 style="margin-bottom:1rem">What the history shows</h2>
-    ${findings.map((f, i) => `<article class="finding card"><h2>${e(f.heading)}</h2><p>${e(f.para)}</p>${f.chart ? `<div class="chart-box${f.chart.horizontal ? " tall" : ""}"><canvas id="finding-${i}" role="img" aria-label="${e(f.heading)}"></canvas></div>` : ""}</article>`).join("")}
+    ${findings.map((f, i) => `<article class="finding card" style="--c:var(${ACCENTS[i % ACCENTS.length]})"><div class="head"><h2>${e(f.heading)}</h2>${f.stat ? `<div class="bigstat">${e(f.stat[0])}<small>${e(f.stat[1])}</small></div>` : ""}</div><p>${e(f.para)}</p>${f.chart ? `<div class="chart-box${f.chart.horizontal ? " tall" : ""}"><canvas id="finding-${i}" role="img" aria-label="${e(f.heading)}"></canvas></div>` : ""}</article>`).join("")}
     </section>`;
 
   // ---------- charts ----------
   let charts = [];
   const lineCharts = new Map();
   function themeDefaults() {
-    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
-    Chart.defaults.font.size = 12;
-    Chart.defaults.color = AT.cssVar("--text-2");
-    Chart.defaults.borderColor = AT.cssVar("--grid");
+    AT.chartDefaults();
   }
 
   function lineDatasets(key) {
@@ -180,11 +182,11 @@
     findings.forEach((f, i) => {
       if (!f.chart) return;
       const c = f.chart, canvas = document.getElementById(`finding-${i}`);
-      const blue = AT.cssVar("--s1"), orange = AT.cssVar("--s2");
-      const colors = c.diverging ? c.values.map((v) => (v >= 0 ? orange : blue)) : AT.cssVar("--s1");
+      const blue = AT.cssVar("--s1"), orange = AT.cssVar("--s2"), accent = AT.cssVar(ACCENTS[i % ACCENTS.length]);
+      const colors = c.heat ? c.values.map((v) => AT.tempColor(v).bg) : c.diverging ? c.values.map((v) => (v >= 0 ? orange : blue)) : accent;
       const isLine = c.kind === "line";
       const dataset = isLine
-        ? { label: c.name, data: c.values, borderColor: blue, backgroundColor: blue, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, pointBorderColor: AT.cssVar("--surface"), pointBorderWidth: 1.5, tension: 0.2 }
+        ? { label: c.name, data: c.values, borderColor: accent, backgroundColor: accent, borderWidth: 2, pointRadius: 4, pointHoverRadius: 6, pointBorderColor: AT.cssVar("--surface"), pointBorderWidth: 1.5, tension: 0.2 }
         : { label: c.name, data: c.values, backgroundColor: colors, borderRadius: 4, borderSkipped: "start", maxBarThickness: 28 };
       const valueAxis = { title: { display: !!c.unit, text: c.unit }, grace: "5%" };
       charts.push(new Chart(canvas, {

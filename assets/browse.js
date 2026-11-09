@@ -3,11 +3,30 @@
   AT.init("browse");
   const content = document.getElementById("content");
   const e = AT.esc;
+  AT.hero("Browse", "Loading…");
   let data;
-  try { data = await AT.loadData(); } catch (error) { document.getElementById("meta").textContent = ""; return AT.showError(content, error); }
+  try { data = await AT.loadData(); } catch (error) { AT.hero("Browse", ""); return AT.showError(content, error); }
   const rows = data.rows.filter((r) => r.date === data.latestDate);
-  document.getElementById("meta").textContent = `Latest values for ${data.latestDate}. Click a column heading to sort; click the star to save an airport to your shortlist.`;
+  AT.hero("Browse", `Latest values for <strong>${e(data.latestDate)}</strong>. Click a column heading to sort, and click the ☆ to save an airport to your shortlist.`);
   document.getElementById("controls").hidden = false;
+
+  // temperature history per airport, for the little trend lines
+  const tempHistory = new Map();
+  for (const r of data.rows) {
+    if (!tempHistory.has(r.item_id)) tempHistory.set(r.item_id, new Map());
+    tempHistory.get(r.item_id).set(r.date, r.temp_c);
+  }
+  const sparkValues = (id) => data.dates.map((d) => (tempHistory.get(id).has(d) ? tempHistory.get(id).get(d) : null));
+
+  // ranges used to draw the data bars
+  const range = (key) => { const v = rows.map((r) => r[key]).filter((x) => x !== null); return v.length ? [Math.min(...v), Math.max(...v)] : [0, 1]; };
+  const ranges = Object.fromEntries(AT.NUM.map((n) => [n.key, range(n.key)]));
+  const barCell = (key, value) => {
+    if (value === null) return `<td class="num">–</td>`;
+    const [lo, hi] = ranges[key];
+    const w = key === "pressure_hpa" ? (hi === lo ? 50 : 8 + ((value - lo) / (hi - lo)) * 92) : (hi === 0 ? 0 : (value / hi) * 100);
+    return `<td class="num databar" style="--bar:var(${AT.METRIC[key].color});--w:${w.toFixed(0)}%">${AT.fmt(value)}</td>`;
+  };
 
   // shortlist is kept in the browser (localStorage) so it survives a reload
   const KEY = "airport-tracker-shortlist";
@@ -24,13 +43,13 @@
   fill("f-source", "sources", rows.map((r) => r.source));
 
   const columns = [
-    { key: "star", label: "★", text: true, nosort: true },
+    { key: "star", label: "★", nosort: true },
     { key: "item", label: "Airport", text: true },
-    { key: "city", label: "City", text: true },
-    { key: "country", label: "Country", text: true },
+    ...AT.NUM.map((n) => ({ key: n.key, label: `${AT.METRIC[n.key].icon} ${n.short} (${n.unit})` })),
+    { key: "trend", label: "Temp trend", nosort: true },
+    { key: "city", label: "Location", text: true },
     { key: "region", label: "Region", text: true },
     { key: "source", label: "Source", text: true },
-    ...AT.NUM.map((n) => ({ key: n.key, label: `${n.short} (${n.unit})` })),
   ];
 
   function visibleRows() {
@@ -57,17 +76,19 @@
     document.getElementById("star-count").textContent = shortlist.size;
     document.getElementById("count").textContent = `Showing ${shown.length} of ${rows.length} airports.`;
     const head = columns.map((c) => {
-      if (c.nosort) return `<th scope="col" aria-label="Shortlist">${c.label}</th>`;
+      if (c.nosort) return `<th scope="col"${c.key === "star" ? ' aria-label="Shortlist"' : ""}>${c.label}</th>`;
       const active = state.sort === c.key;
       const arrow = active ? (state.dir === "asc" ? "▲" : "▼") : "↕";
       const aria = active ? (state.dir === "asc" ? "ascending" : "descending") : "none";
-      return `<th scope="col" class="${c.text ? "" : "num"}" aria-sort="${aria}"><button class="sort" type="button" data-sort="${c.key}">${e(c.label)} <span class="arrow" aria-hidden="true">${arrow}</span></button></th>`;
+      return `<th scope="col" class="${c.text ? "" : "num"}" aria-sort="${aria}"><button class="sort" type="button" data-sort="${c.key}">${c.label} <span class="arrow" aria-hidden="true">${arrow}</span></button></th>`;
     }).join("");
     const body = shown.map((r) => {
       const on = shortlist.has(r.item_id);
       return `<tr><td><button class="star" type="button" data-star="${e(r.item_id)}" aria-pressed="${on}" aria-label="${on ? "Remove" : "Add"} ${e(r.item)} ${on ? "from" : "to"} shortlist">${on ? "★" : "☆"}</button></td>
-        <td><strong>${e(r.item)}</strong> <span class="muted">${e(r.item_id)}</span></td><td>${e(r.city)}</td><td>${e(r.country)}</td><td>${e(r.region)}</td><td>${e(r.source)}</td>
-        ${AT.NUM.map((n) => `<td class="num">${AT.fmt(r[n.key])}</td>`).join("")}</tr>`;
+        <td>${AT.condIcon(r)}<strong>${e(r.item)}</strong> <span class="muted">${e(r.item_id)}</span></td>
+        <td class="num">${AT.tempChip(r.temp_c)}</td>${barCell("wind_kt", r.wind_kt)}${barCell("visibility_km", r.visibility_km)}${barCell("pressure_hpa", r.pressure_hpa)}
+        <td>${AT.sparkline(sparkValues(r.item_id), AT.tempColor(r.temp_c) ? AT.tempColor(r.temp_c).bg : "var(--accent)")}</td>
+        <td>${e(r.city)}, ${e(r.country)}</td><td><span class="dot" style="background:${AT.regionColor(r.region)}"></span>${e(r.region)}</td><td>${e(r.source)}</td></tr>`;
     }).join("") || `<tr><td colspan="${columns.length}" class="muted">No airports match.</td></tr>`;
     content.innerHTML = `<div class="table-wrap"><table><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
   }
