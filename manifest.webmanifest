@@ -1,0 +1,15 @@
+{
+  "id": "./",
+  "name": "Airport Weather Tracker",
+  "short_name": "Airports",
+  "description": "Daily weather at 41 airports around the world.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fcfcfb",
+  "theme_color": "#1c5cab",
+  "icons": [
+    { "src": "assets/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "assets/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

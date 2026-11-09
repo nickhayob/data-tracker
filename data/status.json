@@ -1,0 +1,20 @@
+{
+  "run_time": "2026-11-09T18:09:06Z",
+  "first_run_date": "2026-11-09",
+  "days_with_success": 1,
+  "items": 41,
+  "new_today": [],
+  "gone_today": [],
+  "sources": [
+    {
+      "name": "metar",
+      "ok": true,
+      "count": 21
+    },
+    {
+      "name": "openmeteo",
+      "ok": true,
+      "count": 20
+    }
+  ]
+}
