@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Trends · Airport Weather Tracker</title>
+  <meta name="description" content="Charts and findings computed in your browser from the full daily history of airport weather.">
+  <meta name="theme-color" content="#1c5cab">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <header id="site-nav"></header>
+  <main>
+    <div id="offline" class="banner" hidden>You are offline. Showing the last data this device loaded.</div>
+    <h1>Trends</h1>
+    <p id="meta" class="muted">Loading…</p>
+    <div id="content"></div>
+  </main>
+  <script src="assets/vendor/chart.umd.min.js"></script>
+  <script src="assets/common.js"></script>
+  <script src="assets/trends.js"></script>
+</body>
+</html>
