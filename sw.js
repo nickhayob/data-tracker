@@ -1,7 +1,7 @@
 // Service worker: lets the site open offline.
 //  - the pages, styles, scripts and icons are served from the cache and refreshed in the background
 //  - the data files (data/*) are loaded from the network first, and the last copy is kept for offline use
-const VERSION = "v2";
+const VERSION = "v3";
 const CACHE = `airport-tracker-${VERSION}`;
 const SHELL = [
   "./", "index.html", "browse.html", "trends.html", "manifest.webmanifest",

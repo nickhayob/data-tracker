@@ -22,7 +22,7 @@
     ? `<div class="banner">No airport data was collected on ${e(runDate)}; showing the latest data, from ${e(latestDate)}.</div>` : "";
 
   const sourcesRows = status.sources.map((s) =>
-    `<tr><td>${e(s.name)}</td><td><span class="badge ${s.ok ? "ok" : "fail"}">${s.ok ? "✓ OK" : "✕ Failed"}</span></td><td class="num">${s.count}</td></tr>`).join("");
+    `<tr><td>${e(s.name)}</td><td><span class="badge ${s.ok ? "ok" : "fail"}">${s.ok ? AT.icon("check", 14) + "OK" : AT.icon("x", 14) + "Failed"}</span></td><td class="num">${s.count}</td></tr>`).join("");
 
   // biggest moves, with a color and icon for the value that moved most
   const { moves } = prevDate ? AT.compare(previous, latest) : { moves: [] };
@@ -51,7 +51,7 @@
     const cells = AT.NUM.map((n) => {
       const d = p && r[n.key] !== null && p[n.key] !== null ? r[n.key] - p[n.key] : null;
       const small = d === null || Math.abs(d) < 0.05;
-      const arrow = small ? "" : d > 0 ? "▲ " : "▼ ";
+      const arrow = small ? "" : AT.icon(d > 0 ? "up" : "down", 13);
       const value = n.key === "temp_c" ? AT.tempChip(r[n.key]) : AT.fmt(r[n.key]);
       return `<td class="num">${value}<span class="delta${small ? "" : d > 0 ? " up" : " down"}">${d === null ? "" : arrow + AT.fmtSigned(d)}</span></td>`;
     }).join("");
@@ -59,19 +59,19 @@
       <td><span class="dot" style="background:${AT.regionColor(r.region)}"></span>${e(r.city)}, ${e(r.country)}</td>${cells}</tr>`;
   }).join("");
 
-  const tile = (num, label, icon, color, small) => `<div class="tile" data-icon="${icon}" style="--c:var(${color})"><div class="num${small ? " sm" : ""}">${num}</div><div class="label">${label}</div></div>`;
+  const tile = (num, label, icon, color, small) => `<div class="tile" style="--c:var(${color})"><span class="ico">${AT.icon(icon, 22)}</span><div><div class="num${small ? " sm" : ""}">${num}</div><div class="label">${label}</div></div></div>`;
   content.innerHTML = `${staleNote}
   <div class="tiles">
-    ${tile(status.items, "airports in latest run", "🛫", "--s1")}
-    ${tile(status.days_with_success, "days with data", "📅", "--s3")}
-    ${tile(e(status.first_run_date || "–"), "first run date", "🚩", "--s7", true)}
-    ${tile(status.new_today.length, "appeared today", "🆕", "--s4")}
-    ${tile(status.gone_today.length, "disappeared today", "👋", "--s8")}
+    ${tile(status.items, "airports in latest run", "plane", "--s1")}
+    ${tile(status.days_with_success, "days with data", "calendar", "--s3")}
+    ${tile(e(status.first_run_date || "–"), "first run date", "flag", "--s7", true)}
+    ${tile(status.new_today.length, "appeared today", "plus", "--s4")}
+    ${tile(status.gone_today.length, "disappeared today", "minus", "--s8")}
   </div>
   <section class="block"><h2>Right now</h2>
     <div class="grid2">
-      <div class="card" style="--c:var(--s2)"><h3>🌡️ Temperature at every airport (°C)</h3><div class="chart-box"><canvas id="c-temps" role="img" aria-label="Bar chart of the temperature at every airport, coldest to warmest"></canvas></div></div>
-      <div class="card" style="--c:var(--s3)"><h3>🌍 Average temperature by region (°C)</h3><div class="chart-box"><canvas id="c-regions" role="img" aria-label="Bar chart of the average temperature in each region"></canvas></div></div>
+      <div class="card" style="--c:var(--s2)"><h3>${AT.icon("thermometer", 18)} Temperature at every airport (°C)</h3><div class="chart-box"><canvas id="c-temps" role="img" aria-label="Bar chart of the temperature at every airport, coldest to warmest"></canvas></div></div>
+      <div class="card" style="--c:var(--s3)"><h3>${AT.icon("globe", 18)} Average temperature by region (°C)</h3><div class="chart-box"><canvas id="c-regions" role="img" aria-label="Bar chart of the average temperature in each region"></canvas></div></div>
     </div>
   </section>
   <section class="block"><h2>Sources</h2>

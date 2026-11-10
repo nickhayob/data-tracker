@@ -7,7 +7,7 @@
   let data;
   try { data = await AT.loadData(); } catch (error) { AT.hero("Browse", ""); return AT.showError(content, error); }
   const rows = data.rows.filter((r) => r.date === data.latestDate);
-  AT.hero("Browse", `Latest values for <strong>${e(data.latestDate)}</strong>. Click a column heading to sort, and click the ☆ to save an airport to your shortlist.`);
+  AT.hero("Browse", `Latest values for <strong>${e(data.latestDate)}</strong>. Click a column heading to sort, and click the star to save an airport to your shortlist.`);
   document.getElementById("controls").hidden = false;
 
   // temperature history per airport, for the little trend lines
@@ -43,7 +43,7 @@
   fill("f-source", "sources", rows.map((r) => r.source));
 
   const columns = [
-    { key: "star", label: "★", nosort: true },
+    { key: "star", label: AT.icon("star", 16, true).replace('class="ic"', 'class="ic star-head"'), nosort: true },
     { key: "item", label: "Airport", text: true },
     ...AT.NUM.map((n) => ({ key: n.key, label: `${AT.METRIC[n.key].icon} ${n.short} (${n.unit})` })),
     { key: "trend", label: "Temp trend", nosort: true },
@@ -78,13 +78,13 @@
     const head = columns.map((c) => {
       if (c.nosort) return `<th scope="col"${c.key === "star" ? ' aria-label="Shortlist"' : ""}>${c.label}</th>`;
       const active = state.sort === c.key;
-      const arrow = active ? (state.dir === "asc" ? "▲" : "▼") : "↕";
+      const arrow = AT.icon(active ? (state.dir === "asc" ? "up" : "down") : "updown", 14);
       const aria = active ? (state.dir === "asc" ? "ascending" : "descending") : "none";
       return `<th scope="col" class="${c.text ? "" : "num"}" aria-sort="${aria}"><button class="sort" type="button" data-sort="${c.key}">${c.label} <span class="arrow" aria-hidden="true">${arrow}</span></button></th>`;
     }).join("");
     const body = shown.map((r) => {
       const on = shortlist.has(r.item_id);
-      return `<tr><td><button class="star" type="button" data-star="${e(r.item_id)}" aria-pressed="${on}" aria-label="${on ? "Remove" : "Add"} ${e(r.item)} ${on ? "from" : "to"} shortlist">${on ? "★" : "☆"}</button></td>
+      return `<tr><td><button class="star" type="button" data-star="${e(r.item_id)}" aria-pressed="${on}" aria-label="${on ? "Remove" : "Add"} ${e(r.item)} ${on ? "from" : "to"} shortlist">${AT.icon("star", 19, on)}</button></td>
         <td>${AT.condIcon(r)}<strong>${e(r.item)}</strong> <span class="muted">${e(r.item_id)}</span></td>
         <td class="num">${AT.tempChip(r.temp_c)}</td>${barCell("wind_kt", r.wind_kt)}${barCell("visibility_km", r.visibility_km)}${barCell("pressure_hpa", r.pressure_hpa)}
         <td>${AT.sparkline(sparkValues(r.item_id), AT.tempColor(r.temp_c) ? AT.tempColor(r.temp_c).bg : "var(--accent)")}</td>

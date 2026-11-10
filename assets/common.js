@@ -112,9 +112,18 @@
     const el = document.getElementById("site-nav");
     if (!el) return;
     el.className = "topbar";
-    el.innerHTML = `<div class="inner"><a class="brand" href="index.html">✈ Airport Weather Tracker</a><nav aria-label="Main">` +
+    el.innerHTML = `<div class="inner"><a class="brand" href="index.html"><span class="logo">${icon("plane", 18)}</span><span>Airport Weather Tracker</span></a><nav aria-label="Main">` +
       links.map(([href, text, id]) => `<a href="${href}"${id === active ? ' aria-current="page"' : ""}>${text}</a>`).join("") +
       `</nav></div>`;
+  }
+
+  function renderFooter() {
+    if (document.getElementById("site-footer")) return;
+    const el = document.createElement("footer");
+    el.id = "site-footer";
+    el.innerHTML = `<div class="inner"><span>Weather data: <a href="https://aviationweather.gov/data/api/">aviationweather.gov</a> (U.S. airports) and <a href="https://open-meteo.com/">Open-Meteo</a> (international airports, CC BY 4.0).</span>
+      <a href="https://github.com/nickhayob/data-tracker">${icon("github", 16)} View on GitHub</a></div>`;
+    document.body.appendChild(el);
   }
 
   function showError(el, error) {
@@ -133,6 +142,7 @@
 
   function init(active) {
     renderNav(active);
+    renderFooter();
     offlineNotice();
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
@@ -142,12 +152,41 @@
   function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 
   // --- color and graphics helpers ----------------------------------------------------------
+  // One set of line icons (24x24, drawn with the current text color) used on every page.
+  const ICONS = {
+    thermometer: '<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>',
+    wind: '<path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/>',
+    eye: '<path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/>',
+    gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+    plane: '<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>',
+    calendar: '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+    flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>',
+    plus: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8v8"/>',
+    minus: '<circle cx="12" cy="12" r="10"/><path d="M8 12h8"/>',
+    globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+    fog: '<path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 2.5 8.2"/><path d="M16 17H7"/><path d="M17 21H9"/>',
+    snow: '<line x1="2" x2="22" y1="12" y2="12"/><line x1="12" x2="12" y1="2" y2="22"/><path d="m20 16-4-4 4-4"/><path d="m4 8 4 4-4 4"/><path d="m16 4-4 4-4-4"/><path d="m8 20 4-4 4 4"/>',
+    flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+    star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
+    check: '<path d="M20 6 9 17l-5-5"/>',
+    x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+    up: '<path d="m18 15-6-6-6 6"/>',
+    down: '<path d="m6 9 6 6 6-6"/>',
+    updown: '<path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/>',
+    github: '<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>',
+  };
+  /** Inline SVG for an icon name. `fill` fills the shape (used for a saved star). */
+  function icon(name, size = 18, fill = false) {
+    return `<svg class="ic" width="${size}" height="${size}" viewBox="0 0 24 24" fill="${fill ? "currentColor" : "none"}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+  }
+
   // Icon and color (a CSS variable) for each numeric column.
   const METRIC = {
-    temp_c: { icon: "🌡️", color: "--s2" },
-    wind_kt: { icon: "💨", color: "--s3" },
-    visibility_km: { icon: "👁️", color: "--s7" },
-    pressure_hpa: { icon: "⏲️", color: "--s1" },
+    temp_c: { icon: icon("thermometer", 16), color: "--s2" },
+    wind_kt: { icon: icon("wind", 16), color: "--s3" },
+    visibility_km: { icon: icon("eye", 16), color: "--s7" },
+    pressure_hpa: { icon: icon("gauge", 16), color: "--s1" },
   };
   const REGION_COLOR = { "North America": "--s1", "Europe": "--s7", "Asia": "--s2", "Middle East": "--s4", "Oceania": "--s3", "South America": "--s5", "Africa": "--s6" };
   const regionColor = (region) => `var(${REGION_COLOR[region] || "--s8"})`;
@@ -172,13 +211,13 @@
 
   /** A weather-style icon worked out from the numbers only (there is no cloud data). */
   function condition(r) {
-    if (r.visibility_km !== null && r.visibility_km < 5) return { icon: "🌫️", label: "Low visibility (under 5 km)" };
-    if (r.wind_kt !== null && r.wind_kt >= 20) return { icon: "💨", label: "Windy (20 kt or more)" };
-    if (r.temp_c !== null && r.temp_c <= 0) return { icon: "❄️", label: "Freezing (0 °C or below)" };
-    if (r.temp_c !== null && r.temp_c >= 30) return { icon: "🔥", label: "Hot (30 °C or above)" };
-    return { icon: "🌤️", label: "Mild, light wind, good visibility" };
+    if (r.visibility_km !== null && r.visibility_km < 5) return { icon: "fog", color: "var(--text-2)", label: "Low visibility (under 5 km)" };
+    if (r.wind_kt !== null && r.wind_kt >= 20) return { icon: "wind", color: "var(--s3)", label: "Windy (20 kt or more)" };
+    if (r.temp_c !== null && r.temp_c <= 0) return { icon: "snow", color: "var(--s1)", label: "Freezing (0 °C or below)" };
+    if (r.temp_c !== null && r.temp_c >= 30) return { icon: "flame", color: "var(--s2)", label: "Hot (30 °C or above)" };
+    return { icon: "sun", color: "var(--s4)", label: "Mild, light wind, good visibility" };
   }
-  const condIcon = (r) => { const c = condition(r); return `<span class="cond" title="${esc(c.label)}">${c.icon}</span>`; };
+  const condIcon = (r) => { const c = condition(r); return `<span class="cond" style="color:${c.color}" title="${esc(c.label)}">${icon(c.icon, 18)}</span>`; };
 
   /** Tiny inline line chart. `values` may contain nulls; fewer than 2 points draws nothing. */
   function sparkline(values, color, w = 84, h = 24) {
@@ -199,11 +238,10 @@
     el.className = "hero";
     el.innerHTML = `<div class="inner"><div><h1>${esc(title)}</h1><p id="lastrun">${subHtml}</p></div>
       <svg class="hero-art" viewBox="0 0 420 170" aria-hidden="true">
-        <circle cx="332" cy="50" r="46" fill="#ffd166" opacity=".25"/><circle cx="332" cy="50" r="30" fill="#ffd166"/>
-        <g fill="#fff" opacity=".95"><ellipse cx="108" cy="126" rx="48" ry="16"/><circle cx="90" cy="113" r="21"/><circle cx="128" cy="108" r="25"/></g>
-        <g fill="#fff" opacity=".7"><ellipse cx="300" cy="146" rx="40" ry="12"/><circle cx="286" cy="136" r="15"/><circle cx="314" cy="133" r="18"/></g>
-        <path d="M20 152 Q200 22 380 72" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="1 9" stroke-linecap="round" opacity=".9"/>
-        <g transform="translate(236 59) rotate(-7)"><polygon points="26,0 -16,-14 -8,0 -16,14" fill="#fff"/><polygon points="6,0 -8,-26 -2,0 -8,26" fill="#dcecff"/></g>
+        <g fill="none" stroke="#fff" opacity=".16"><circle cx="318" cy="156" r="56"/><circle cx="318" cy="156" r="98"/><circle cx="318" cy="156" r="140"/></g>
+        <path d="M30 140 C 120 30, 280 20, 390 70" fill="none" stroke="#fff" stroke-width="2.5" stroke-dasharray="2 9" stroke-linecap="round" opacity=".85"/>
+        <circle cx="30" cy="140" r="6" fill="#fff"/><circle cx="390" cy="70" r="6" fill="#fff"/><circle cx="390" cy="70" r="15" fill="none" stroke="#fff" opacity=".45"/>
+        <g transform="translate(202 45) rotate(36) scale(2.3) translate(-12 -12)" fill="#fff" stroke="#fff" stroke-width="1" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></g>
       </svg></div>`;
   }
 
@@ -215,5 +253,5 @@
     Chart.defaults.borderColor = cssVar("--grid");
   }
 
-  window.AT = { METRIC, regionColor, tempColor, tempChip, condition, condIcon, sparkline, hero, chartDefaults, NUM, TOP_N, esc, parseCSV, loadData, moveScore, compare, fmt, fmtSigned, unitOf, labelOf, init, showError, cssVar };
+  window.AT = { icon, METRIC, regionColor, tempColor, tempChip, condition, condIcon, sparkline, hero, chartDefaults, NUM, TOP_N, esc, parseCSV, loadData, moveScore, compare, fmt, fmtSigned, unitOf, labelOf, init, showError, cssVar };
 })();
