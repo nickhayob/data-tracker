@@ -81,3 +81,44 @@ date,item_id,item,source,iata,city,country,region,temp_c,wind_kt,visibility_km,p
 2026-11-10,WSSS,Singapore Changi,openmeteo,SIN,Singapore,Singapore,Asia,24.8,5.0,10.38,1011.2
 2026-11-10,YSSY,Sydney Kingsford Smith,openmeteo,SYD,Sydney,Australia,Oceania,16.1,3.4,32.58,1014.9
 2026-11-10,ZBAA,Beijing Capital,openmeteo,PEK,Beijing,China,Asia,2.0,2.9,14.30,1023.5
+2026-11-11,CYYZ,Toronto Pearson Intl,openmeteo,YYZ,Toronto,Canada,North America,6.1,3.1,19.00,1014.6
+2026-11-11,EDDF,Frankfurt am Main,openmeteo,FRA,Frankfurt,Germany,Europe,8.0,2.8,0.36,1002.5
+2026-11-11,EGLL,London Heathrow,openmeteo,LHR,London,United Kingdom,Europe,9.4,6.4,7.16,1003.6
+2026-11-11,EHAM,Amsterdam Schiphol,openmeteo,AMS,Amsterdam,Netherlands,Europe,6.7,6.4,16.82,1003.5
+2026-11-11,FAOR,O. R. Tambo Intl,openmeteo,JNB,Johannesburg,South Africa,Africa,28.9,5.3,46.86,1014.4
+2026-11-11,KATL,Hartsfield-Jackson Atlanta Intl,metar,ATL,Atlanta,United States,North America,11.7,5.0,16.09,1017.2
+2026-11-11,KBOS,Boston Logan Intl,metar,BOS,Boston,United States,North America,10.6,9.0,16.09,1013.1
+2026-11-11,KCLT,Charlotte Douglas Intl,metar,CLT,Charlotte,United States,North America,12.8,3.0,16.09,1017.9
+2026-11-11,KDEN,Denver Intl,metar,DEN,Denver,United States,North America,1.7,11.0,16.09,1024.8
+2026-11-11,KDFW,Dallas/Fort Worth Intl,metar,DFW,Dallas-Fort Worth,United States,North America,17.8,4.0,16.09,1018.3
+2026-11-11,KDTW,Detroit Metropolitan,metar,DTW,Detroit,United States,North America,5.6,0.0,14.48,1014.5
+2026-11-11,KFLL,Fort Lauderdale-Hollywood Intl,metar,FLL,Fort Lauderdale,United States,North America,27.2,4.0,16.09,1017.2
+2026-11-11,KIAH,George Bush Intercontinental,metar,IAH,Houston,United States,North America,15.6,5.0,16.09,1019.3
+2026-11-11,KJFK,John F. Kennedy Intl,metar,JFK,New York,United States,North America,13.9,6.0,16.09,1015.5
+2026-11-11,KLAS,Harry Reid Intl,metar,LAS,Las Vegas,United States,North America,12.8,4.0,16.09,1022.6
+2026-11-11,KLAX,Los Angeles Intl,metar,LAX,Los Angeles,United States,North America,16.1,4.0,16.09,1017.6
+2026-11-11,KLGA,LaGuardia,metar,LGA,New York,United States,North America,13.9,7.0,16.09,1014.9
+2026-11-11,KMCO,Orlando Intl,metar,MCO,Orlando,United States,North America,23.0,4.0,16.09,1017.7
+2026-11-11,KMIA,Miami Intl,metar,MIA,Miami,United States,North America,27.2,8.0,16.09,1017.4
+2026-11-11,KMSP,Minneapolis-St. Paul Intl,metar,MSP,Minneapolis,United States,North America,9.4,4.0,16.09,1013.5
+2026-11-11,KORD,Chicago O'Hare Intl,metar,ORD,Chicago,United States,North America,9.4,4.0,16.09,1012.4
+2026-11-11,KPHL,Philadelphia Intl,metar,PHL,Philadelphia,United States,North America,11.7,0.0,16.09,1016.2
+2026-11-11,KPHX,Phoenix Sky Harbor Intl,metar,PHX,Phoenix,United States,North America,17.2,0.0,16.09,1017.9
+2026-11-11,KSEA,Seattle-Tacoma Intl,metar,SEA,Seattle,United States,North America,11.7,7.0,16.09,1015.2
+2026-11-11,KSFO,San Francisco Intl,metar,SFO,San Francisco,United States,North America,12.8,5.0,0.40,1018.7
+2026-11-11,KXNA,Northwest Arkansas Regional,metar,XNA,Fayetteville,United States,North America,13.9,5.0,16.09,1016.6
+2026-11-11,LEMD,Madrid Barajas,openmeteo,MAD,Madrid,Spain,Europe,14.6,8.9,10.86,1002.5
+2026-11-11,LFPG,Paris Charles de Gaulle,openmeteo,CDG,Paris,France,Europe,14.5,5.3,30.54,1002.5
+2026-11-11,LTFM,Istanbul Airport,openmeteo,IST,Istanbul,Turkey,Europe,16.3,8.5,33.16,1014.5
+2026-11-11,MMMX,Mexico City Intl,openmeteo,MEX,Mexico City,Mexico,North America,14.6,1.6,30.08,1021.1
+2026-11-11,OMDB,Dubai Intl,openmeteo,DXB,Dubai,United Arab Emirates,Middle East,29.0,11.0,26.24,1015.1
+2026-11-11,OTHH,Hamad Intl,openmeteo,DOH,Doha,Qatar,Middle East,24.5,10.6,17.14,1017.2
+2026-11-11,RJTT,Tokyo Haneda,openmeteo,HND,Tokyo,Japan,Asia,12.9,4.1,17.02,1028.0
+2026-11-11,RKSI,Seoul Incheon,openmeteo,ICN,Seoul,South Korea,Asia,13.7,8.8,25.54,1026.3
+2026-11-11,SBGR,Sao Paulo Guarulhos,openmeteo,GRU,Sao Paulo,Brazil,South America,25.0,1.5,8.08,1022.8
+2026-11-11,VHHH,Hong Kong Intl,openmeteo,HKG,Hong Kong,Hong Kong,Asia,21.9,3.8,19.56,1022.0
+2026-11-11,VIDP,Indira Gandhi Intl,openmeteo,DEL,Delhi,India,Asia,22.9,3.3,7.80,1014.7
+2026-11-11,VTBS,Suvarnabhumi,openmeteo,BKK,Bangkok,Thailand,Asia,25.7,2.9,23.10,1014.9
+2026-11-11,WSSS,Singapore Changi,openmeteo,SIN,Singapore,Singapore,Asia,25.7,3.4,15.22,1012.6
+2026-11-11,YSSY,Sydney Kingsford Smith,openmeteo,SYD,Sydney,Australia,Oceania,19.7,7.2,25.78,1018.8
+2026-11-11,ZBAA,Beijing Capital,openmeteo,PEK,Beijing,China,Asia,3.4,1.9,10.84,1020.9
