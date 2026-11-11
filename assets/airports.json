@@ -1,0 +1,248 @@
+[
+ {
+  "item_id": "CYYZ",
+  "iata": "YYZ",
+  "lat": 43.6777,
+  "lon": -79.6248
+ },
+ {
+  "item_id": "EDDF",
+  "iata": "FRA",
+  "lat": 50.0333,
+  "lon": 8.5706
+ },
+ {
+  "item_id": "EGLL",
+  "iata": "LHR",
+  "lat": 51.4706,
+  "lon": -0.4619
+ },
+ {
+  "item_id": "EHAM",
+  "iata": "AMS",
+  "lat": 52.3086,
+  "lon": 4.7639
+ },
+ {
+  "item_id": "FAOR",
+  "iata": "JNB",
+  "lat": -26.1392,
+  "lon": 28.246
+ },
+ {
+  "item_id": "KATL",
+  "iata": "ATL",
+  "lat": 33.6297,
+  "lon": -84.4422
+ },
+ {
+  "item_id": "KBOS",
+  "iata": "BOS",
+  "lat": 42.3606,
+  "lon": -71.0097
+ },
+ {
+  "item_id": "KCLT",
+  "iata": "CLT",
+  "lat": 35.2225,
+  "lon": -80.9543
+ },
+ {
+  "item_id": "KDEN",
+  "iata": "DEN",
+  "lat": 39.8466,
+  "lon": -104.6562
+ },
+ {
+  "item_id": "KDFW",
+  "iata": "DFW",
+  "lat": 32.8974,
+  "lon": -97.022
+ },
+ {
+  "item_id": "KDTW",
+  "iata": "DTW",
+  "lat": 42.2311,
+  "lon": -83.3312
+ },
+ {
+  "item_id": "KFLL",
+  "iata": "FLL",
+  "lat": 26.0787,
+  "lon": -80.1622
+ },
+ {
+  "item_id": "KIAH",
+  "iata": "IAH",
+  "lat": 29.9844,
+  "lon": -95.3607
+ },
+ {
+  "item_id": "KJFK",
+  "iata": "JFK",
+  "lat": 40.6392,
+  "lon": -73.7639
+ },
+ {
+  "item_id": "KLAS",
+  "iata": "LAS",
+  "lat": 36.0719,
+  "lon": -115.1634
+ },
+ {
+  "item_id": "KLAX",
+  "iata": "LAX",
+  "lat": 33.9382,
+  "lon": -118.3866
+ },
+ {
+  "item_id": "KLGA",
+  "iata": "LGA",
+  "lat": 40.7794,
+  "lon": -73.8803
+ },
+ {
+  "item_id": "KMCO",
+  "iata": "MCO",
+  "lat": 28.4182,
+  "lon": -81.3241
+ },
+ {
+  "item_id": "KMIA",
+  "iata": "MIA",
+  "lat": 25.7881,
+  "lon": -80.3169
+ },
+ {
+  "item_id": "KMSP",
+  "iata": "MSP",
+  "lat": 44.8852,
+  "lon": -93.2313
+ },
+ {
+  "item_id": "KORD",
+  "iata": "ORD",
+  "lat": 41.9602,
+  "lon": -87.9316
+ },
+ {
+  "item_id": "KPHL",
+  "iata": "PHL",
+  "lat": 39.8733,
+  "lon": -75.2268
+ },
+ {
+  "item_id": "KPHX",
+  "iata": "PHX",
+  "lat": 33.4278,
+  "lon": -112.0037
+ },
+ {
+  "item_id": "KSEA",
+  "iata": "SEA",
+  "lat": 47.4447,
+  "lon": -122.3144
+ },
+ {
+  "item_id": "KSFO",
+  "iata": "SFO",
+  "lat": 37.6196,
+  "lon": -122.3656
+ },
+ {
+  "item_id": "KXNA",
+  "iata": "XNA",
+  "lat": 36.2897,
+  "lon": -94.3115
+ },
+ {
+  "item_id": "LEMD",
+  "iata": "MAD",
+  "lat": 40.4936,
+  "lon": -3.5668
+ },
+ {
+  "item_id": "LFPG",
+  "iata": "CDG",
+  "lat": 49.0097,
+  "lon": 2.5479
+ },
+ {
+  "item_id": "LTFM",
+  "iata": "IST",
+  "lat": 41.2753,
+  "lon": 28.7519
+ },
+ {
+  "item_id": "MMMX",
+  "iata": "MEX",
+  "lat": 19.4363,
+  "lon": -99.0721
+ },
+ {
+  "item_id": "OMDB",
+  "iata": "DXB",
+  "lat": 25.2528,
+  "lon": 55.3644
+ },
+ {
+  "item_id": "OTHH",
+  "iata": "DOH",
+  "lat": 25.2731,
+  "lon": 51.6081
+ },
+ {
+  "item_id": "RJTT",
+  "iata": "HND",
+  "lat": 35.5523,
+  "lon": 139.7798
+ },
+ {
+  "item_id": "RKSI",
+  "iata": "ICN",
+  "lat": 37.4692,
+  "lon": 126.4505
+ },
+ {
+  "item_id": "SBGR",
+  "iata": "GRU",
+  "lat": -23.4356,
+  "lon": -46.4731
+ },
+ {
+  "item_id": "VHHH",
+  "iata": "HKG",
+  "lat": 22.3089,
+  "lon": 113.9146
+ },
+ {
+  "item_id": "VIDP",
+  "iata": "DEL",
+  "lat": 28.5665,
+  "lon": 77.1031
+ },
+ {
+  "item_id": "VTBS",
+  "iata": "BKK",
+  "lat": 13.69,
+  "lon": 100.7501
+ },
+ {
+  "item_id": "WSSS",
+  "iata": "SIN",
+  "lat": 1.3502,
+  "lon": 103.994
+ },
+ {
+  "item_id": "YSSY",
+  "iata": "SYD",
+  "lat": -33.9461,
+  "lon": 151.1772
+ },
+ {
+  "item_id": "ZBAA",
+  "iata": "PEK",
+  "lat": 40.0801,
+  "lon": 116.5846
+ }
+]

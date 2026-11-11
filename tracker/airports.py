@@ -15,12 +15,13 @@ class Airport:
     country: str
     region: str
     source: str  # "metar" or "openmeteo"
-    lat: float | None = None  # only needed for the source that looks up by coordinates
+    lat: float | None = None  # Open-Meteo looks airports up by coordinates; also used to place them on the globe
     lon: float | None = None
 
 
-def _us(icao, iata, name, city):
-    return Airport(icao, iata, name, city, "United States", "North America", "metar")
+def _us(icao, iata, name, city, lat, lon):
+    # lat/lon are only used to place the airport on the website globe (METAR is looked up by code)
+    return Airport(icao, iata, name, city, "United States", "North America", "metar", lat, lon)
 
 
 def _intl(icao, iata, name, city, country, region, lat, lon):
@@ -29,27 +30,27 @@ def _intl(icao, iata, name, city, country, region, lat, lon):
 
 AIRPORTS: list[Airport] = [
     # United States: reported by aviationweather.gov METAR observations
-    _us("KATL", "ATL", "Hartsfield-Jackson Atlanta Intl", "Atlanta"),
-    _us("KLAX", "LAX", "Los Angeles Intl", "Los Angeles"),
-    _us("KORD", "ORD", "Chicago O'Hare Intl", "Chicago"),
-    _us("KDFW", "DFW", "Dallas/Fort Worth Intl", "Dallas-Fort Worth"),
-    _us("KDEN", "DEN", "Denver Intl", "Denver"),
-    _us("KJFK", "JFK", "John F. Kennedy Intl", "New York"),
-    _us("KLGA", "LGA", "LaGuardia", "New York"),
-    _us("KSFO", "SFO", "San Francisco Intl", "San Francisco"),
-    _us("KSEA", "SEA", "Seattle-Tacoma Intl", "Seattle"),
-    _us("KLAS", "LAS", "Harry Reid Intl", "Las Vegas"),
-    _us("KMCO", "MCO", "Orlando Intl", "Orlando"),
-    _us("KMIA", "MIA", "Miami Intl", "Miami"),
-    _us("KPHX", "PHX", "Phoenix Sky Harbor Intl", "Phoenix"),
-    _us("KIAH", "IAH", "George Bush Intercontinental", "Houston"),
-    _us("KBOS", "BOS", "Boston Logan Intl", "Boston"),
-    _us("KMSP", "MSP", "Minneapolis-St. Paul Intl", "Minneapolis"),
-    _us("KDTW", "DTW", "Detroit Metropolitan", "Detroit"),
-    _us("KPHL", "PHL", "Philadelphia Intl", "Philadelphia"),
-    _us("KCLT", "CLT", "Charlotte Douglas Intl", "Charlotte"),
-    _us("KFLL", "FLL", "Fort Lauderdale-Hollywood Intl", "Fort Lauderdale"),
-    _us("KXNA", "XNA", "Northwest Arkansas Regional", "Fayetteville"),
+    _us("KATL", "ATL", "Hartsfield-Jackson Atlanta Intl", "Atlanta", 33.6297, -84.4422),
+    _us("KLAX", "LAX", "Los Angeles Intl", "Los Angeles", 33.9382, -118.3866),
+    _us("KORD", "ORD", "Chicago O'Hare Intl", "Chicago", 41.9602, -87.9316),
+    _us("KDFW", "DFW", "Dallas/Fort Worth Intl", "Dallas-Fort Worth", 32.8974, -97.022),
+    _us("KDEN", "DEN", "Denver Intl", "Denver", 39.8466, -104.6562),
+    _us("KJFK", "JFK", "John F. Kennedy Intl", "New York", 40.6392, -73.7639),
+    _us("KLGA", "LGA", "LaGuardia", "New York", 40.7794, -73.8803),
+    _us("KSFO", "SFO", "San Francisco Intl", "San Francisco", 37.6196, -122.3656),
+    _us("KSEA", "SEA", "Seattle-Tacoma Intl", "Seattle", 47.4447, -122.3144),
+    _us("KLAS", "LAS", "Harry Reid Intl", "Las Vegas", 36.0719, -115.1634),
+    _us("KMCO", "MCO", "Orlando Intl", "Orlando", 28.4182, -81.3241),
+    _us("KMIA", "MIA", "Miami Intl", "Miami", 25.7881, -80.3169),
+    _us("KPHX", "PHX", "Phoenix Sky Harbor Intl", "Phoenix", 33.4278, -112.0037),
+    _us("KIAH", "IAH", "George Bush Intercontinental", "Houston", 29.9844, -95.3607),
+    _us("KBOS", "BOS", "Boston Logan Intl", "Boston", 42.3606, -71.0097),
+    _us("KMSP", "MSP", "Minneapolis-St. Paul Intl", "Minneapolis", 44.8852, -93.2313),
+    _us("KDTW", "DTW", "Detroit Metropolitan", "Detroit", 42.2311, -83.3312),
+    _us("KPHL", "PHL", "Philadelphia Intl", "Philadelphia", 39.8733, -75.2268),
+    _us("KCLT", "CLT", "Charlotte Douglas Intl", "Charlotte", 35.2225, -80.9543),
+    _us("KFLL", "FLL", "Fort Lauderdale-Hollywood Intl", "Fort Lauderdale", 26.0787, -80.1622),
+    _us("KXNA", "XNA", "Northwest Arkansas Regional", "Fayetteville", 36.2897, -94.3115),
     # International: reported by Open-Meteo (looked up by coordinates)
     _intl("EGLL", "LHR", "London Heathrow", "London", "United Kingdom", "Europe", 51.4706, -0.4619),
     _intl("LFPG", "CDG", "Paris Charles de Gaulle", "Paris", "France", "Europe", 49.0097, 2.5479),

@@ -1,12 +1,12 @@
 // Service worker: lets the site open offline.
 //  - the pages, styles, scripts and icons are served from the cache and refreshed in the background
 //  - the data files (data/*) are loaded from the network first, and the last copy is kept for offline use
-const VERSION = "v3";
+const VERSION = "v4";
 const CACHE = `airport-tracker-${VERSION}`;
 const SHELL = [
   "./", "index.html", "browse.html", "trends.html", "manifest.webmanifest",
   "assets/site.css", "assets/common.js", "assets/today.js", "assets/browse.js", "assets/trends.js",
-  "assets/vendor/chart.umd.min.js", "assets/icons/icon-192.png", "assets/icons/icon-512.png",
+  "assets/vendor/chart.umd.min.js", "assets/vendor/d3-array.min.js", "assets/vendor/d3-geo.min.js", "assets/vendor/topojson-client.min.js", "assets/vendor/land-110m.json", "assets/globe.js", "assets/airports.json", "assets/icons/icon-192.png", "assets/icons/icon-512.png",
   "data/history.csv", "data/status.json",
 ];
 

@@ -110,6 +110,10 @@ The site is installable (web app manifest + service worker). Data files are load
 | `assets/common.js` | Shared navigation, data loading, move rule, formatting |
 | `assets/today.js`, `assets/browse.js`, `assets/trends.js` | Page scripts |
 | `assets/vendor/chart.umd.min.js` | Chart.js 4.4.1 (kept in the repository so the site works offline) |
+| `assets/globe.js` | The interactive globe on the Today page (drag to rotate, click an airport, color by any value) |
+| `assets/airports.json` | Airport coordinates for the globe, generated from `tracker/airports.py` by `tools/make_airports_json.py` (`tests/test_globe_data.py` checks they match) |
+| `assets/vendor/d3-array.min.js`, `d3-geo.min.js`, `topojson-client.min.js` | d3-array 3.2.4, d3-geo 3.1.1 and topojson-client 3.1.0 (map projection; ISC license) |
+| `assets/vendor/land-110m.json` | Land outlines from world-atlas 2.0.2 (Natural Earth, public domain) |
 | `assets/icons/` | App icons (`tools/make_icons.py` draws them) |
 | `manifest.webmanifest`, `sw.js` | Web app manifest and service worker |
 | `pyproject.toml`, `uv.lock`, `.python-version` | Python 3.14 project managed with uv |

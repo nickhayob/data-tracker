@@ -68,6 +68,9 @@
     ${tile(status.new_today.length, "appeared today", "plus", "--s4")}
     ${tile(status.gone_today.length, "disappeared today", "minus", "--s8")}
   </div>
+  <section class="block"><h2>Airports around the world</h2>
+    <div class="card"><div id="globe"><p class="muted">Loading the globe…</p></div></div>
+  </section>
   <section class="block"><h2>Right now</h2>
     <div class="grid2">
       <div class="card" style="--c:var(--s2)"><h3>${AT.icon("thermometer", 18)} Temperature at every airport (°C)</h3><div class="chart-box"><canvas id="c-temps" role="img" aria-label="Bar chart of the temperature at every airport, coldest to warmest"></canvas></div></div>
@@ -83,6 +86,8 @@
     <p class="muted small">Data for ${e(latestDate || "–")}. The small line under each value is the change since the previous run${prevDate ? ` (${e(prevDate)})` : ""}. Hover an icon to see what it means; the dot shows the region.</p>
     <div class="table-wrap"><table><thead><tr><th>Airport</th><th>Location</th>${header}</tr></thead><tbody>${body}</tbody></table></div>
   </section>`;
+
+  AT.globe(document.getElementById("globe"), { rows: latest, prevById });
 
   // charts (rebuilt when the light/dark setting changes so the text stays readable)
   let charts = [];
