@@ -1,10 +1,31 @@
 {
-  "run_time": "2026-11-14T07:55:22Z",
+  "run_time": "2026-11-14T13:27:04Z",
   "first_run_date": "2026-11-09",
   "days_with_success": 6,
-  "items": 41,
+  "items": 21,
   "new_today": [],
-  "gone_today": [],
+  "gone_today": [
+    "CYYZ",
+    "EDDF",
+    "EGLL",
+    "EHAM",
+    "FAOR",
+    "LEMD",
+    "LFPG",
+    "LTFM",
+    "MMMX",
+    "OMDB",
+    "OTHH",
+    "RJTT",
+    "RKSI",
+    "SBGR",
+    "VHHH",
+    "VIDP",
+    "VTBS",
+    "WSSS",
+    "YSSY",
+    "ZBAA"
+  ],
   "sources": [
     {
       "name": "metar",
@@ -13,8 +34,8 @@
     },
     {
       "name": "openmeteo",
-      "ok": true,
-      "count": 20
+      "ok": false,
+      "count": 0
     }
   ]
 }
