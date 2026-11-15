@@ -1,10 +1,9 @@
 {
-  "run_time": "2026-11-14T13:27:04Z",
+  "run_time": "2026-11-15T13:53:29Z",
   "first_run_date": "2026-11-09",
-  "days_with_success": 6,
-  "items": 21,
-  "new_today": [],
-  "gone_today": [
+  "days_with_success": 7,
+  "items": 41,
+  "new_today": [
     "CYYZ",
     "EDDF",
     "EGLL",
@@ -26,6 +25,7 @@
     "YSSY",
     "ZBAA"
   ],
+  "gone_today": [],
   "sources": [
     {
       "name": "metar",
@@ -34,8 +34,8 @@
     },
     {
       "name": "openmeteo",
-      "ok": false,
-      "count": 0
+      "ok": true,
+      "count": 20
     }
   ]
 }
