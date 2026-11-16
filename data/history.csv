@@ -266,3 +266,24 @@ date,item_id,item,source,iata,city,country,region,temp_c,wind_kt,visibility_km,p
 2026-11-15,WSSS,Singapore Changi,openmeteo,SIN,Singapore,Singapore,Asia,25.4,3.8,11.30,1012.7
 2026-11-15,YSSY,Sydney Kingsford Smith,openmeteo,SYD,Sydney,Australia,Oceania,16.6,6.6,19.56,1012.4
 2026-11-15,ZBAA,Beijing Capital,openmeteo,PEK,Beijing,China,Asia,6.6,6.5,18.98,1027.7
+2026-11-16,KATL,Hartsfield-Jackson Atlanta Intl,metar,ATL,Atlanta,United States,North America,8.9,4.0,16.09,1028.0
+2026-11-16,KBOS,Boston Logan Intl,metar,BOS,Boston,United States,North America,6.1,6.0,16.09,1020.8
+2026-11-16,KCLT,Charlotte Douglas Intl,metar,CLT,Charlotte,United States,North America,6.1,6.0,16.09,1030.2
+2026-11-16,KDEN,Denver Intl,metar,DEN,Denver,United States,North America,5.0,6.0,16.09,1020.5
+2026-11-16,KDFW,Dallas/Fort Worth Intl,metar,DFW,Dallas-Fort Worth,United States,North America,8.9,9.0,16.09,1026.3
+2026-11-16,KDTW,Detroit Metropolitan,metar,DTW,Detroit,United States,North America,5.0,5.0,16.09,1032.1
+2026-11-16,KFLL,Fort Lauderdale-Hollywood Intl,metar,FLL,Fort Lauderdale,United States,North America,22.8,7.0,16.09,1020.8
+2026-11-16,KIAH,George Bush Intercontinental,metar,IAH,Houston,United States,North America,11.1,11.0,16.09,1021.8
+2026-11-16,KJFK,John F. Kennedy Intl,metar,JFK,New York,United States,North America,6.1,13.0,16.09,1024.9
+2026-11-16,KLAS,Harry Reid Intl,metar,LAS,Las Vegas,United States,North America,17.8,6.0,16.09,1018.9
+2026-11-16,KLAX,Los Angeles Intl,metar,LAX,Los Angeles,United States,North America,20.0,9.0,16.09,1017.0
+2026-11-16,KLGA,LaGuardia,metar,LGA,New York,United States,North America,6.7,12.0,16.09,1024.6
+2026-11-16,KMCO,Orlando Intl,metar,MCO,Orlando,United States,North America,16.0,8.0,16.09,1023.5
+2026-11-16,KMIA,Miami Intl,metar,MIA,Miami,United States,North America,21.7,4.0,16.09,1021.0
+2026-11-16,KMSP,Minneapolis-St. Paul Intl,metar,MSP,Minneapolis,United States,North America,4.4,7.0,16.09,1028.9
+2026-11-16,KORD,Chicago O'Hare Intl,metar,ORD,Chicago,United States,North America,3.9,0.0,16.09,1032.0
+2026-11-16,KPHL,Philadelphia Intl,metar,PHL,Philadelphia,United States,North America,7.2,6.0,16.09,1025.7
+2026-11-16,KPHX,Phoenix Sky Harbor Intl,metar,PHX,Phoenix,United States,North America,20.6,0.0,16.09,1016.6
+2026-11-16,KSEA,Seattle-Tacoma Intl,metar,SEA,Seattle,United States,North America,8.3,8.0,16.09,1014.9
+2026-11-16,KSFO,San Francisco Intl,metar,SFO,San Francisco,United States,North America,12.2,9.0,3.22,1017.4
+2026-11-16,KXNA,Northwest Arkansas Regional,metar,XNA,Fayetteville,United States,North America,7.2,3.0,16.09,1029.6
