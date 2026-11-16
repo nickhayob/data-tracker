@@ -121,7 +121,8 @@ def fetch_openmeteo() -> bytes:
         "current": "temperature_2m,wind_speed_10m,pressure_msl,visibility",
         "wind_speed_unit": "kn",
     }
-    return http_get(OPENMETEO_URL, params)
+    # Open-Meteo is sometimes slow from GitHub's servers, so wait longer and try more times than the default
+    return http_get(OPENMETEO_URL, params, attempts=5, timeout=60)
 
 
 def parse_openmeteo(raw: bytes) -> list[dict]:
